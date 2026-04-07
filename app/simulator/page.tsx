@@ -1,11 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowLeft, Zap } from "lucide-react";
-import Link from "next/link";
+import { Zap, BookOpen } from "lucide-react";
 import { useKnowledgeBaseStore } from "@/src/store/knowledge-base";
 import { DISCIPLINES } from "@/src/data/mock-data";
 import { SimulatorPanel } from "@/src/components/simulator-panel";
+import { PageHeader } from "@/src/components/page-header";
 
 export default function SimulatorPage() {
   const { selectedDisciplines, selectDiscipline } = useKnowledgeBaseStore();
@@ -23,18 +23,7 @@ export default function SimulatorPage() {
       </div>
 
       <div className="relative z-10">
-        {/* Навигация */}
-        <nav className="sticky top-0 z-20 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200 dark:border-slate-700/50 shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-            <Link
-              href="/"
-              className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors w-fit font-semibold"
-            >
-              <ArrowLeft size={18} />
-              На главную
-            </Link>
-          </div>
-        </nav>
+        <PageHeader currentPage="simulator" />
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Заголовок */}
@@ -62,8 +51,8 @@ export default function SimulatorPage() {
               className="lg:col-span-1 space-y-4"
             >
               <div className="bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 shadow-sm">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-5">
-                  📚 Все дисциплины
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-5 flex items-center gap-2">
+                  <BookOpen size={20} /> Все дисциплины
                 </h3>
                 <div className="space-y-2 max-h-[calc(100vh-300px)] overflow-y-auto">
                   {DISCIPLINES.map((discipline) => (

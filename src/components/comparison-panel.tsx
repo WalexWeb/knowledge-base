@@ -155,7 +155,7 @@ export const ComparisonPanel: React.FC<ComparisonPanelProps> = ({
       exit={{ opacity: 0, x: 20 }}
       className="rounded-2xl border border-(--color-border) shadow-lg overflow-hidden"
     >
-      {/* Header с градиентом */}
+      {/* Заголовок с градиентом */}
       <div className="bg-linear-to-r from-(--color-primary) to-(--color-primary-600) px-8 py-6">
         <motion.div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -185,7 +185,7 @@ export const ComparisonPanel: React.FC<ComparisonPanelProps> = ({
 
       {/* Основной контент */}
       <div className="p-8 bg-(--color-surface)">
-        {/* Key Metrics Grid */}
+        {/* Сетка ключевых метрик */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -233,9 +233,9 @@ export const ComparisonPanel: React.FC<ComparisonPanelProps> = ({
           ))}
         </motion.div>
 
-        {/* Charts Section */}
+        {/* Раздел диаграмм */}
         <div className="grid lg:grid-cols-2 gap-6 mb-8">
-          {/* Level Distribution */}
+          {/* Распределение уровней */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -287,7 +287,7 @@ export const ComparisonPanel: React.FC<ComparisonPanelProps> = ({
             </div>
           </motion.div>
 
-          {/* Competency Distribution */}
+          {/* Распределение компетенций */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -328,7 +328,7 @@ export const ComparisonPanel: React.FC<ComparisonPanelProps> = ({
           </motion.div>
         </div>
 
-        {/* Skills Comparison Chart */}
+        {/* Диаграмма сравнения навыков */}
         {selectedDisciplines.length > 1 && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -374,7 +374,7 @@ export const ComparisonPanel: React.FC<ComparisonPanelProps> = ({
           </motion.div>
         )}
 
-        {/* Disciplines Comparison Table */}
+        {/* Таблица сравнения дисциплин */}
         {disciplineComparison.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -432,7 +432,7 @@ export const ComparisonPanel: React.FC<ComparisonPanelProps> = ({
           </motion.div>
         )}
 
-        {/* Skills Cloud */}
+        {/* Облако навыков */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}

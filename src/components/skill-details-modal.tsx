@@ -110,28 +110,20 @@ export const SkillDetailsModal: React.FC<SkillDetailsModalProps> = ({
                     transition={{ delay: 0.1 + index * 0.05 }}
                     className="p-4 bg-linear-to-r from-slate-50 to-slate-100 dark:from-slate-700/30 dark:to-slate-800/30 rounded-xl border border-slate-200 dark:border-slate-700/50 hover:border-slate-300 dark:hover:border-slate-600/50 transition-all shadow-sm hover:shadow-md"
                   >
-                    <div className="flex items-center justify-between gap-4">
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-slate-900 dark:text-white">
-                          {discipline.name}
-                        </h4>
-                        <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 flex items-center gap-3 flex-wrap">
-                          <span className="flex items-center gap-1">
-                            <Calendar size={14} />
-                            Семестр {discipline.semester}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Clock size={14} />
-                            {discipline.hours} ч.
-                          </span>
-                        </p>
-                      </div>
-                      <a
-                        href={`/discipline/${discipline.id}`}
-                        className="px-4 py-2 bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg font-medium transition-all shadow-md hover:shadow-lg whitespace-nowrap"
-                      >
-                        Перейти
-                      </a>
+                    <div>
+                      <h4 className="font-semibold text-slate-900 dark:text-white">
+                        {discipline.name}
+                      </h4>
+                      <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 flex items-center gap-3 flex-wrap">
+                        <span className="flex items-center gap-1">
+                          <Calendar size={14} />
+                          Семестр {discipline.semester}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Clock size={14} />
+                          {discipline.hours} ч.
+                        </span>
+                      </p>
                     </div>
                   </motion.div>
                 ))}

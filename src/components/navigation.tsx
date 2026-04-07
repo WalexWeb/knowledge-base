@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Map, Zap, TrendingUp } from "lucide-react";
+import { Map, Zap, TrendingUp, Network } from "lucide-react";
 
 interface NavItem {
   href: string;
@@ -30,6 +30,12 @@ const NAV_ITEMS: NavItem[] = [
     label: "Симулятор",
     icon: <Zap size={20} />,
     description: "Планирование обучения",
+  },
+  {
+    href: "/correlations",
+    label: "Корреляции",
+    icon: <Network size={20} />,
+    description: "Взаимосвязи дисциплин",
   },
 ];
 

@@ -2247,79 +2247,79 @@ export const DISCIPLINES: Discipline[] = [
 export const BADGES: Badge[] = [
   {
     id: "badge-infosec-basic",
-    name: "🛡️ Основы ИБ",
+    name: "Основы ИБ",
     description:
       "Освоил базовые принципы информационной безопасности и политики защиты",
-    icon: "🛡️",
+    icon: "shield",
     unlocked: false,
   },
   {
     id: "badge-network-pro",
-    name: "🌐 Сетевой администратор",
+    name: "Сетевой администратор",
     description:
       "Умеет настраивать межсетевые экраны, маршрутизаторы и контролировать защищённость сетей",
-    icon: "🌐",
+    icon: "network",
     unlocked: false,
   },
   {
     id: "badge-math-modeler",
-    name: "📐 Математическое моделирование",
+    name: "Математическое моделирование",
     description:
       "Владеет методами математического моделирования и прогнозирования процессов",
-    icon: "📐",
+    icon: "math",
     unlocked: false,
   },
   {
     id: "badge-programmer",
-    name: "💻 Программист",
+    name: "Программист",
     description:
       "Владеет языками программирования и инструментальными средствами разработки",
-    icon: "💻",
+    icon: "code",
     unlocked: false,
   },
   {
     id: "badge-document-security",
-    name: "📄 Секретность",
+    name: "Секретность",
     description:
       "Владеет навыками работы с документами ограниченного доступа и защиты государственной тайны",
-    icon: "📄",
+    icon: "document",
     unlocked: false,
   },
   {
     id: "badge-crypto-master",
-    name: "🔐 Криптограф",
+    name: "Криптограф",
     description:
       "Мастер криптографических алгоритмов и методов защиты информации",
-    icon: "🔐",
+    icon: "lock",
     unlocked: false,
   },
   {
     id: "badge-incident-response",
-    name: "🚨 Реагент инцидентов",
+    name: "Реагент инцидентов",
     description:
       "Способность быстро реагировать на инциденты информационной безопасности",
-    icon: "🚨",
+    icon: "alert",
     unlocked: false,
   },
   {
     id: "badge-forensic-expert",
-    name: "🔍 Судебный эксперт",
+    name: "Судебный эксперт",
     description: "Проводит компьютерные экспертизы и исследования",
-    icon: "🔍",
+    icon: "search",
     unlocked: false,
   },
   {
     id: "badge-analytic",
-    name: "📊 Аналитик",
+    name: "Аналитик",
     description: "Владеет методами информационно-аналитической работы",
-    icon: "📊",
+    icon: "chart",
     unlocked: false,
   },
   {
     id: "badge-leader",
-    name: "👥 Лидер",
+    name: "Лидер",
     description: "Умеет организовывать работу команды и управлять проектами",
-    icon: "👥",
+    icon: "users",
     unlocked: false,
   },
 ];

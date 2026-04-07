@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Discipline, Skill, Recommendation } from "../types";
 import { SkillCloud } from "./skill-cloud";
 import { ProgressBar } from "./progress-components";
-import { AlertCircle, TrendingUp } from "lucide-react";
+import { AlertCircle, TrendingUp, BookOpen, BookMarked, Zap, Flame, Lightbulb } from "lucide-react";
 
 interface SimulatorPanelProps {
   allDisciplines: Discipline[];
@@ -107,7 +107,7 @@ export const SimulatorPanel: React.FC<SimulatorPanelProps> = ({
         className="bg-linear-to-br from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 rounded-2xl p-8 border border-cyan-200 dark:border-cyan-700/50 shadow-sm"
       >
         <motion.h2 className="text-3xl font-bold bg-linear-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent mb-3">
-          ⚡ Симулятор обучения
+          <Zap size={20} className="text-cyan-500" /> Симулятор обучения
         </motion.h2>
         <p className="text-slate-700 dark:text-slate-300 font-medium">
           Посмотрите, какие навыки вы получите при выборе определённых дисциплин
@@ -154,7 +154,7 @@ export const SimulatorPanel: React.FC<SimulatorPanelProps> = ({
                           {d.name}
                         </p>
                         <p className="text-xs text-slate-600 dark:text-blue-300 font-medium">
-                          📚 {d.skills.length} навыков
+                          <BookOpen size={16} className="inline mr-1" />{d.skills.length} навыков
                         </p>
                       </div>
                       <motion.button
@@ -174,7 +174,7 @@ export const SimulatorPanel: React.FC<SimulatorPanelProps> = ({
             {/* Правая панель - Статистика */}
             <div className="space-y-4">
               <h3 className="text-lg font-bold text-slate-800 dark:text-white">
-                📊 Итог обучения
+                <div className="flex items-center gap-2"><BookMarked size={20} />Итог обучения</div>
               </h3>
 
               {/* Карточка с итогами */}
@@ -261,7 +261,7 @@ export const SimulatorPanel: React.FC<SimulatorPanelProps> = ({
           className="bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-900/50 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm"
         >
           <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-5">
-            🎯 Сформируемые навыки
+            <div className="flex items-center gap-2"><TrendingUp size={20} />Сформируемые навыки</div>
           </h3>
           <SkillCloud
             skills={simulatorData.totalSkills}
@@ -323,10 +323,11 @@ export const SimulatorPanel: React.FC<SimulatorPanelProps> = ({
                       className={`text-xs px-2.5 py-1 rounded-full font-semibold whitespace-nowrap ${badgeStyles[rec.priority]}`}
                     >
                       {rec.priority === "high"
-                        ? "🔥"
+                        ? <Flame size={14} className="inline mr-1" />
                         : rec.priority === "medium"
-                          ? "⚡"
-                          : "💡"}{" "}
+                          ? <Zap size={14} className="inline mr-1" />
+                          : <Lightbulb size={14} className="inline mr-1" />
+                      }
                       {rec.reason}
                     </span>
                   </div>

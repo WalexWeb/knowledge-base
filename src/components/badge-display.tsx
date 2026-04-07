@@ -2,13 +2,42 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Lock } from "lucide-react";
+import {
+  Lock,
+  Shield,
+  Globe,
+  Calculator,
+  Code,
+  FileText,
+  Lock as LockIcon,
+  AlertCircle,
+  Search,
+  BarChart3,
+  Users,
+  Star,
+} from "lucide-react";
 import { Badge } from "../types";
 
 interface BadgeDisplayProps {
   badges: Badge[];
   onBadgeClick?: (badgeId: string) => void;
 }
+
+const getIconForBadge = (icon: string) => {
+  const iconMap: Record<string, React.ReactNode> = {
+    shield: <Shield size={40} />,
+    network: <Globe size={40} />,
+    math: <Calculator size={40} />,
+    code: <Code size={40} />,
+    document: <FileText size={40} />,
+    lock: <LockIcon size={40} />,
+    alert: <AlertCircle size={40} />,
+    search: <Search size={40} />,
+    chart: <BarChart3 size={40} />,
+    users: <Users size={40} />,
+  };
+  return iconMap[icon] || <Shield size={40} />;
+};
 
 export const BadgeDisplay: React.FC<BadgeDisplayProps> = ({
   badges,
@@ -65,7 +94,7 @@ export const BadgeDisplay: React.FC<BadgeDisplayProps> = ({
             </motion.div>
           )}
 
-          {/* Эмодзи бейджа */}
+          {/* Иконка бейджа */}
           <motion.div
             animate={{
               scale: badge.unlocked ? [1, 1.1, 1] : 1,
@@ -75,9 +104,9 @@ export const BadgeDisplay: React.FC<BadgeDisplayProps> = ({
               repeat: Infinity,
               repeatDelay: 2,
             }}
-            className="text-5xl mb-3 filter drop-shadow-lg"
+            className="mb-3 filter drop-shadow-lg text-(--color-accent)"
           >
-            {badge.icon}
+            {getIconForBadge(badge.icon)}
           </motion.div>
 
           {/* Название */}
@@ -95,9 +124,9 @@ export const BadgeDisplay: React.FC<BadgeDisplayProps> = ({
             <motion.div
               initial={{ opacity: 0 }}
               whileHover={{ opacity: 1 }}
-              className="mt-2 text-xs font-medium text-(--color-accent) opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              className="mt-2 text-xs font-medium text-(--color-accent) opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-1"
             >
-              🎉 {new Date(badge.unlockedAt).toLocaleDateString("ru-RU")}
+              <Star size={14} /> {new Date(badge.unlockedAt).toLocaleDateString("ru-RU")}
             </motion.div>
           )}
 

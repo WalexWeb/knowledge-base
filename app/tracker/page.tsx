@@ -2,8 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Trophy, TrendingUp } from "lucide-react";
-import Link from "next/link";
+import { Trophy, TrendingUp, BarChart3, Target, LineChart } from "lucide-react";
 import { useKnowledgeBaseStore } from "@/src/store/knowledge-base";
 import { DISCIPLINES } from "@/src/data/mock-data";
 import {
@@ -12,6 +11,7 @@ import {
   TimelineItem,
 } from "@/src/components/progress-components";
 import { BadgeDisplay } from "@/src/components/badge-display";
+import { PageHeader } from "@/src/components/page-header";
 
 export default function TrackerPage() {
   const { userProfile, toggleSkillCompletion, unlockBadge } =
@@ -69,18 +69,7 @@ export default function TrackerPage() {
       </div>
 
       <div className="relative z-10">
-        {/* Навигация */}
-        <nav className="sticky top-0 z-20 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200 dark:border-slate-700/50 shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-            <Link
-              href="/"
-              className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors w-fit font-semibold"
-            >
-              <ArrowLeft size={18} />
-              На главную
-            </Link>
-          </div>
-        </nav>
+        <PageHeader currentPage="tracker" />
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Заголовок */}
@@ -109,7 +98,7 @@ export default function TrackerPage() {
               className="col-span-1 md:col-span-2 bg-linear-to-br from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 border border-emerald-200 dark:border-emerald-700/50 rounded-2xl p-7 shadow-sm"
             >
               <p className="text-slate-700 dark:text-slate-300 text-sm font-medium mb-4">
-                📊 Общий прогресс
+                <div className="flex items-center gap-2"><BarChart3 size={20} />Общий прогресс</div>
               </p>
               <div className="mb-5">
                 <motion.p
@@ -136,7 +125,7 @@ export default function TrackerPage() {
               className="bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-700/50 rounded-2xl p-7 shadow-sm"
             >
               <p className="text-slate-700 dark:text-slate-300 text-sm font-medium mb-4">
-                🎯 Статус
+                <div className="flex items-center gap-2"><Target size={20} />Статус</div>
               </p>
               <div className="text-4xl font-bold bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 {completionPercentage < 30
@@ -263,7 +252,7 @@ export default function TrackerPage() {
             className="mt-16 bg-linear-to-br from-white to-slate-50 dark:from-slate-800/50 dark:to-slate-900/50 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-8 shadow-sm"
           >
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8">
-              📈 Путь развития
+              <div className="flex items-center gap-2"><LineChart size={20} />Путь развития</div>
             </h2>
             <div className="space-y-6">
               {[1, 2, 3, 4].map((semester) => {

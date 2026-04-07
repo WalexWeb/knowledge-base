@@ -66,7 +66,7 @@ export const CompetencyMap: React.FC<CompetencyMapProps> = ({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="mb-8 p-5 bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700/50 backdrop-blur-xl shadow-sm flex flex-wrap gap-8"
+        className="mb-6 p-5 bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700/50 backdrop-blur-xl shadow-sm flex flex-wrap gap-8"
       >
         <div className="flex items-center gap-3">
           <div className="w-5 h-5 rounded-lg bg-linear-to-br from-blue-400 to-blue-600 shadow-md"></div>
@@ -85,6 +85,20 @@ export const CompetencyMap: React.FC<CompetencyMapProps> = ({
           <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
             ОПК - Общеспециальные компетенции
           </span>
+        </div>
+      </motion.div>
+      {/* Совет */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+        className="mb-8 p-5 bg-linear-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border border-blue-200 dark:border-blue-700/50 rounded-2xl text-slate-700 dark:text-slate-300 text-sm font-medium backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow"
+      >
+        <div className="flex gap-3">
+          <div className="text-md font-medium">
+            <strong>Совет:</strong> Используйте Ctrl (Cmd на Mac) + клик для
+            мультивыбора дисциплин и сравнения входных навыков.
+          </div>
         </div>
       </motion.div>
 
@@ -132,22 +146,6 @@ export const CompetencyMap: React.FC<CompetencyMapProps> = ({
           </motion.div>
         ))}
       </div>
-
-      {/* Совет */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="mt-12 p-5 bg-linear-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border border-blue-200 dark:border-blue-700/50 rounded-2xl text-slate-700 dark:text-slate-300 text-sm font-medium backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow"
-      >
-        <div className="flex gap-3">
-          <span className="text-lg">💡</span>
-          <div>
-            <strong>Совет:</strong> Используйте Ctrl (Cmd на Mac) + клик для
-            мультивыбора дисциплин и сравнения входных навыков.
-          </div>
-        </div>
-      </motion.div>
     </div>
   );
 };
