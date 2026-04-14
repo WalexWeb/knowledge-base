@@ -128,11 +128,28 @@ export const ComparisonPanel: React.FC<ComparisonPanelProps> = ({
   }, [skillLevelStats]);
 
   const skillsByDiscipline = useMemo(() => {
-    return selectedDisciplines.map((d) => ({
-      name: d.name.substring(0, 10),
-      skills: d.skills.length,
-      hours: d.hours || 0,
-    }));
+    if (selectedDisciplines.length === 0) return [];
+
+    // Вычисляем эффективность для каждой дисциплины
+    const effectivenessValues = selectedDisciplines.map((d) => {
+      const hours = d.hours || 1;
+      return d.skills.length / hours;
+    });
+
+    // Находим максимальное значение
+    const maxEffectiveness = Math.max(...effectivenessValues);
+
+    // Преобразуем в проценты относительно максимума
+    return selectedDisciplines.map((d, idx) => {
+      const percentage =
+        maxEffectiveness > 0
+          ? (effectivenessValues[idx] / maxEffectiveness) * 100
+          : 0;
+      return {
+        name: d.name.substring(0, 10),
+        эффективность: Math.round(percentage),
+      };
+    });
   }, [selectedDisciplines]);
 
   const skillOverlap = useMemo(() => {
@@ -146,6 +163,51 @@ export const ComparisonPanel: React.FC<ComparisonPanelProps> = ({
       return new Set([...acc].filter((x) => set.has(x)));
     });
     return intersection.size;
+  }, [selectedDisciplines]);
+
+  // Расчет коэффициента корреляции между количеством навыков и часами
+  const correlationStats = useMemo(() => {
+    if (selectedDisciplines.length < 2)
+      return { correlation: 0, strength: "нет данных" };
+
+    const skills = selectedDisciplines.map((d) => d.skills.length);
+    const hours = selectedDisciplines.map((d) => d.hours || 0);
+
+    // Средние значения
+    const meanSkills = skills.reduce((a, b) => a + b, 0) / skills.length;
+    const meanHours = hours.reduce((a, b) => a + b, 0) / hours.length;
+
+    // Расчет коэффициента Пирсона
+    const numerator = skills.reduce(
+      (sum, s, i) => sum + (s - meanSkills) * (hours[i] - meanHours),
+      0,
+    );
+    const sumSqSkills = skills.reduce(
+      (sum, s) => sum + Math.pow(s - meanSkills, 2),
+      0,
+    );
+    const sumSqHours = hours.reduce(
+      (sum, h) => sum + Math.pow(h - meanHours, 2),
+      0,
+    );
+
+    const correlation =
+      Math.sqrt(sumSqSkills) * Math.sqrt(sumSqHours) > 0
+        ? numerator / (Math.sqrt(sumSqSkills) * Math.sqrt(sumSqHours))
+        : 0;
+
+    // Определение силы корреляции
+    const absCorr = Math.abs(correlation);
+    let strength = "нет корреляции";
+    if (absCorr > 0.8) strength = "сильная";
+    else if (absCorr > 0.6) strength = "средняя";
+    else if (absCorr > 0.4) strength = "слабая";
+    else if (absCorr > 0.2) strength = "очень слабая";
+
+    return {
+      correlation: correlation.toFixed(3),
+      strength,
+    };
   }, [selectedDisciplines]);
 
   return (
@@ -194,25 +256,25 @@ export const ComparisonPanel: React.FC<ComparisonPanelProps> = ({
           {[
             {
               icon: BookOpen,
-              label: "Дисциплин",
+              label: "Количество дисциплин",
               value: selectedDisciplines.length,
               color: "from-blue-500 to-blue-600",
             },
             {
               icon: Target,
-              label: "Навыков",
+              label: "Количество навыков",
               value: totalSkills.length,
               color: "from-purple-500 to-purple-600",
             },
             {
               icon: Clock,
-              label: "Часов",
+              label: "Общее количество часов",
               value: totalHours,
               color: "from-amber-500 to-amber-600",
             },
             {
               icon: TrendingUp,
-              label: "Общие навыки",
+              label: "Пересекающиеся навыки",
               value: `${skillOverlap}`,
               color: "from-green-500 to-green-600",
             },
@@ -336,9 +398,15 @@ export const ComparisonPanel: React.FC<ComparisonPanelProps> = ({
             transition={{ delay: 0.4 }}
             className="card mb-8"
           >
-            <h3 className="text-lg font-semibold text-(--color-foreground) mb-4">
-              Сравнение объемов дисциплин
-            </h3>
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-(--color-foreground) mb-4">
+                Эффективность дисциплин (навыки на час)
+              </h3>
+              <p className="text-sm text-(--color-foreground-secondary) mb-4">
+                Показатель плотности информации: сколько навыков приходится на
+                один час обучения
+              </p>
+            </div>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={skillsByDiscipline}>
                 <CartesianGrid stroke="var(--color-border)" opacity={0.5} />
@@ -346,28 +414,31 @@ export const ComparisonPanel: React.FC<ComparisonPanelProps> = ({
                   dataKey="name"
                   stroke="var(--color-foreground-tertiary)"
                 />
-                <YAxis stroke="var(--color-foreground-tertiary)" />
+                <YAxis
+                  stroke="var(--color-foreground-tertiary)"
+                  label={{
+                    value: "Навыки/час",
+                    angle: -90,
+                    position: "insideLeft",
+                  }}
+                />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "var(--color-surface)",
                     border: `1px solid var(--color-border)`,
                     borderRadius: "8px",
                   }}
-                />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="skills"
-                  stroke="var(--color-primary)"
-                  strokeWidth={2}
-                  dot={{ r: 4 }}
+                  formatter={(value) => [`${value}%`, "Эффективность"]}
+                  labelFormatter={(label) => `Дисциплина: ${label}`}
                 />
                 <Line
                   type="monotone"
-                  dataKey="hours"
+                  dataKey="эффективность"
                   stroke="var(--color-accent)"
-                  strokeWidth={2}
-                  dot={{ r: 4 }}
+                  strokeWidth={3}
+                  dot={{ r: 5, fill: "var(--color-accent)" }}
+                  activeDot={{ r: 7 }}
+                  name="Эффективность"
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -393,13 +464,13 @@ export const ComparisonPanel: React.FC<ComparisonPanelProps> = ({
                       Дисциплина
                     </th>
                     <th className="text-center px-4 py-3 font-semibold text-(--color-foreground)">
-                      Навыков
+                      Количество навыков
                     </th>
                     <th className="text-center px-4 py-3 font-semibold text-(--color-foreground)">
-                      Часов
+                      Количество часов
                     </th>
                     <th className="text-center px-4 py-3 font-semibold text-(--color-foreground)">
-                      Компетенций
+                      Количество компетенций
                     </th>
                   </tr>
                 </thead>

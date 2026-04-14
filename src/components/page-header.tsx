@@ -24,7 +24,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ currentPage = "map" }) =
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-3 flex-shrink-0"
+            className="flex items-center gap-3 shrink-0"
           >
             <div className="brand-logo">
               <Shield size={24} />
@@ -32,7 +32,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ currentPage = "map" }) =
           </motion.div>
 
           {/* Навигационные ссылки */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
             {navItems.map(({ href, icon: Icon, label, color }, index) => {
               const isActive = 
                 (currentPage === "map" && href === "/") ||

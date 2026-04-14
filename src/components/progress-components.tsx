@@ -138,7 +138,7 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({
           Семестр {semester}
         </h3>
         <p className="text-xs text-slate-500 dark:text-slate-400">
-          {skillsCount} навыков {isCompleted && "✓"}
+          {skillsCount} навыков {isCompleted && <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Завершено</span>}
         </p>
       </motion.div>
     </motion.div>

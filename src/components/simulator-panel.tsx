@@ -2,6 +2,7 @@
 
 import React, { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle2 } from "lucide-react";
 import { Discipline, Skill, Recommendation } from "../types";
 import { SkillCloud } from "./skill-cloud";
 import { ProgressBar } from "./progress-components";
@@ -138,8 +139,9 @@ export const SimulatorPanel: React.FC<SimulatorPanelProps> = ({
           >
             {/* Левая панель - Выбранные дисциплины */}
             <div className="space-y-4">
-              <h3 className="text-lg font-bold text-slate-800 dark:text-white">
-                ✓ Выбранные дисциплины
+              <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                <CheckCircle2 size={22} className="text-emerald-600 dark:text-emerald-400" />
+                Выбранные дисциплины
               </h3>
               <div className="space-y-2">
                 {simulatorData.selectedDisciplinesData.map((d) => (

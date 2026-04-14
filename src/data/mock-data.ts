@@ -2250,7 +2250,7 @@ export const BADGES: Badge[] = [
     name: "Основы ИБ",
     description:
       "Освоил базовые принципы информационной безопасности и политики защиты",
-    icon: "shield",
+    icon: "shield-check",
     unlocked: false,
   },
   {
@@ -2258,7 +2258,7 @@ export const BADGES: Badge[] = [
     name: "Сетевой администратор",
     description:
       "Умеет настраивать межсетевые экраны, маршрутизаторы и контролировать защищённость сетей",
-    icon: "network",
+    icon: "router",
     unlocked: false,
   },
   {
@@ -2266,7 +2266,7 @@ export const BADGES: Badge[] = [
     name: "Математическое моделирование",
     description:
       "Владеет методами математического моделирования и прогнозирования процессов",
-    icon: "math",
+    icon: "function-square",
     unlocked: false,
   },
   {
@@ -2274,7 +2274,7 @@ export const BADGES: Badge[] = [
     name: "Программист",
     description:
       "Владеет языками программирования и инструментальными средствами разработки",
-    icon: "code",
+    icon: "brackets",
     unlocked: false,
   },
   {
@@ -2282,7 +2282,7 @@ export const BADGES: Badge[] = [
     name: "Секретность",
     description:
       "Владеет навыками работы с документами ограниченного доступа и защиты государственной тайны",
-    icon: "document",
+    icon: "lock-keyhole",
     unlocked: false,
   },
   {
@@ -2290,7 +2290,7 @@ export const BADGES: Badge[] = [
     name: "Криптограф",
     description:
       "Мастер криптографических алгоритмов и методов защиты информации",
-    icon: "lock",
+    icon: "key-round",
     unlocked: false,
   },
   {
@@ -2298,31 +2298,59 @@ export const BADGES: Badge[] = [
     name: "Реагент инцидентов",
     description:
       "Способность быстро реагировать на инциденты информационной безопасности",
-    icon: "alert",
+    icon: "alert-triangle",
     unlocked: false,
   },
   {
     id: "badge-forensic-expert",
     name: "Судебный эксперт",
     description: "Проводит компьютерные экспертизы и исследования",
-    icon: "search",
+    icon: "microscope",
     unlocked: false,
   },
   {
     id: "badge-analytic",
     name: "Аналитик",
     description: "Владеет методами информационно-аналитической работы",
-    icon: "chart",
+    icon: "line-chart",
     unlocked: false,
   },
   {
     id: "badge-leader",
     name: "Лидер",
     description: "Умеет организовывать работу команды и управлять проектами",
-    icon: "users",
+    icon: "crown",
     unlocked: false,
   },
 ];
+
+// Связь между навыками и достижениями (какие навыки разблокируют какие бейджи)
+export const BADGE_SKILLS_MAP: Record<string, string[]> = {
+  "badge-infosec-basic": ["skill-1", "skill-2", "skill-3"], // Основы ИБ - базовые навыки из infosec-basics
+  "badge-network-pro": ["skill-30", "skill-31", "skill-32", "skill-33"], // Сетевой администратор - из computer-tech
+  "badge-math-modeler": ["skill-56", "skill-57", "skill-58", "skill-59"], // Математическое моделирование - из math-analysis
+  "badge-programmer": ["skill-115", "skill-116", "skill-117", "skill-122", "skill-126"], // Программист - из programming-tech-methods
+  "badge-document-security": ["skill-70", "skill-71", "skill-73", "skill-75", "skill-78"], // Секретность - из documents-management
+  "badge-crypto-master": ["skill-173", "skill-175", "skill-177"], // Криптограф - из industrial-practice-tech (криптографическая защита)
+  "badge-incident-response": ["skill-184", "skill-187", "skill-190", "skill-191"], // Реагент инцидентов - из info-analytical-support
+  "badge-forensic-expert": ["skill-178", "skill-179", "skill-180", "skill-183"], // Судебный эксперт - из forensic-computer-expertise
+  "badge-analytic": ["skill-17", "skill-18", "skill-19", "skill-20"], // Аналитик - из it-cybersecurity-mvd
+  "badge-leader": ["skill-193", "skill-196", "skill-199"], // Лидер - из info-psych-support (командная работа)
+};
+
+// Соответствие достижений и дисциплин
+export const BADGE_DISCIPLINES_MAP: Record<string, string[]> = {
+  "badge-infosec-basic": ["infosec-basics", "it-cybersecurity-mvd"],
+  "badge-network-pro": ["computer-tech", "computer-tech-advanced"],
+  "badge-math-modeler": ["math-analysis", "higher-mathematics"],
+  "badge-programmer": ["programming-tech-methods", "multimedia-technologies"],
+  "badge-document-security": ["documents-management"],
+  "badge-crypto-master": ["industrial-practice-tech"],
+  "badge-incident-response": ["info-analytical-support"],
+  "badge-forensic-expert": ["forensic-computer-expertise"],
+  "badge-analytic": ["it-cybersecurity-mvd", "info-analytical-support"],
+  "badge-leader": ["info-psych-support"],
+};
 
 // Начальный профиль пользователя
 export const INITIAL_USER_PROFILE = {

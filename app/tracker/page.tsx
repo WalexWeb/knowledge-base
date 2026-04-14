@@ -14,7 +14,7 @@ import { BadgeDisplay } from "@/src/components/badge-display";
 import { PageHeader } from "@/src/components/page-header";
 
 export default function TrackerPage() {
-  const { userProfile, toggleSkillCompletion, unlockBadge } =
+  const { userProfile, toggleSkillCompletion, toggleDisciplineCompletion, unlockBadge } =
     useKnowledgeBaseStore();
   const [showBadges, setShowBadges] = useState(false);
 
@@ -47,18 +47,6 @@ export default function TrackerPage() {
       (userProfile.completedSkills.length / allSkills.length) * 100,
     );
   }, [userProfile.completedSkills, allSkills]);
-
-  // Проверка разблокированных бейджей
-  const unlockedBadges = useMemo(() => {
-    if (completionPercentage >= 100) {
-      return ["badge-security-engineer"];
-    } else if (completionPercentage >= 70) {
-      return ["badge-incident-response"];
-    } else if (completionPercentage >= 50) {
-      return ["badge-network-admin", "badge-crypto-master"];
-    }
-    return [];
-  }, [completionPercentage]);
 
   return (
     <div className="min-h-screen bg-linear-to-br from-white via-slate-50 to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-slate-900 dark:text-white">
@@ -97,9 +85,10 @@ export default function TrackerPage() {
               animate={{ opacity: 1, scale: 1 }}
               className="col-span-1 md:col-span-2 bg-linear-to-br from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 border border-emerald-200 dark:border-emerald-700/50 rounded-2xl p-7 shadow-sm"
             >
-              <p className="text-slate-700 dark:text-slate-300 text-sm font-medium mb-4">
-                <div className="flex items-center gap-2"><BarChart3 size={20} />Общий прогресс</div>
-              </p>
+              <div className="text-slate-700 dark:text-slate-300 text-sm font-medium mb-4 flex items-center gap-2">
+                <BarChart3 size={20} />
+                Общий прогресс
+              </div>
               <div className="mb-5">
                 <motion.p
                   key={completionPercentage}
@@ -124,9 +113,10 @@ export default function TrackerPage() {
               transition={{ delay: 0.1 }}
               className="bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-700/50 rounded-2xl p-7 shadow-sm"
             >
-              <p className="text-slate-700 dark:text-slate-300 text-sm font-medium mb-4">
-                <div className="flex items-center gap-2"><Target size={20} />Статус</div>
-              </p>
+              <div className="text-slate-700 dark:text-slate-300 text-sm font-medium mb-4 flex items-center gap-2">
+                <Target size={20} />
+                Статус
+              </div>
               <div className="text-4xl font-bold bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 {completionPercentage < 30
                   ? "Новичок"
@@ -147,8 +137,9 @@ export default function TrackerPage() {
               onClick={() => setShowBadges(!showBadges)}
               className="bg-linear-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-2 border-amber-200 dark:border-amber-700/50 rounded-2xl p-7 hover:border-amber-300 dark:hover:border-amber-600/50 transition-all text-left shadow-sm hover:shadow-md"
             >
-              <p className="text-slate-700 dark:text-slate-300 text-sm font-medium mb-2">
-                🏆 Достижения
+              <p className="text-slate-700 dark:text-slate-300 text-sm font-medium mb-2 flex items-center gap-2">
+                <Trophy size={18} className="text-amber-500" />
+                Достижения
               </p>
               <div className="text-4xl font-bold text-amber-600 dark:text-amber-400">
                 {userProfile.badges.filter((b) => b.unlocked).length}
@@ -173,6 +164,7 @@ export default function TrackerPage() {
               <BadgeDisplay
                 badges={userProfile.badges}
                 onBadgeClick={unlockBadge}
+                selectedDisciplines={userProfile.selectedDisciplines}
               />
             </motion.div>
           )}
@@ -202,21 +194,39 @@ export default function TrackerPage() {
                         {item.discipline.name}
                       </h3>
                       <p className="text-sm text-slate-600 dark:text-slate-400 mt-2 font-medium">
-                        📅 Семестр {item.discipline.semester}
+                        Семестр {item.discipline.semester}
                       </p>
                     </div>
-                    <div className="text-right bg-emerald-100 dark:bg-emerald-900/30 px-4 py-2 rounded-lg">
-                      <motion.p
-                        key={percentage}
-                        initial={{ scale: 0.8 }}
-                        animate={{ scale: 1 }}
-                        className="text-2xl font-bold text-emerald-600 dark:text-emerald-400"
+                    <div className="flex flex-col gap-3 items-end">
+                      <div className="text-right bg-emerald-100 dark:bg-emerald-900/30 px-4 py-2 rounded-lg">
+                        <motion.p
+                          key={percentage}
+                          initial={{ scale: 0.8 }}
+                          animate={{ scale: 1 }}
+                          className="text-2xl font-bold text-emerald-600 dark:text-emerald-400"
+                        >
+                          {percentage}%
+                        </motion.p>
+                        <p className="text-xs text-slate-600 dark:text-slate-400">
+                          {completedCount}/{totalCount}
+                        </p>
+                      </div>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() =>
+                          toggleDisciplineCompletion(
+                            item.skills.map((s) => s.id)
+                          )
+                        }
+                        className={`px-4 py-2 rounded-lg font-medium text-sm transition-all border-2 ${
+                          percentage === 100
+                            ? "bg-emerald-500 dark:bg-emerald-600 text-white border-emerald-600 dark:border-emerald-700 hover:bg-emerald-600"
+                            : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-600"
+                        }`}
                       >
-                        {percentage}%
-                      </motion.p>
-                      <p className="text-xs text-slate-600 dark:text-slate-400">
-                        {completedCount}/{totalCount}
-                      </p>
+                        {percentage === 100 ? "✓ Отмечено" : "Отметить все"}
+                      </motion.button>
                     </div>
                   </div>
 
@@ -252,7 +262,10 @@ export default function TrackerPage() {
             className="mt-16 bg-linear-to-br from-white to-slate-50 dark:from-slate-800/50 dark:to-slate-900/50 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-8 shadow-sm"
           >
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8">
-              <div className="flex items-center gap-2"><LineChart size={20} />Путь развития</div>
+              <div className="flex items-center gap-2">
+                <LineChart size={20} />
+                Путь развития
+              </div>
             </h2>
             <div className="space-y-6">
               {[1, 2, 3, 4].map((semester) => {
