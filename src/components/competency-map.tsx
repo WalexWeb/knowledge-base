@@ -45,7 +45,7 @@ export const CompetencyMap: React.FC<CompetencyMapProps> = ({
             Карта дисциплин
           </h1>
           <p className="text-slate-600 dark:text-slate-400 mt-2">
-            Интерактивная карта развития в информационной безопасности
+            База знаний Информационной безопасности
           </p>
         </motion.div>
         {selectedDisciplineIds.length > 0 && (
@@ -83,7 +83,7 @@ export const CompetencyMap: React.FC<CompetencyMapProps> = ({
         <div className="flex items-center gap-3">
           <div className="w-5 h-5 rounded-lg bg-linear-to-br from-purple-400 to-purple-600 shadow-md"></div>
           <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
-            ОПК - Общеспециальные компетенции
+            ОПК — общепрофессиональные компетенции
           </span>
         </div>
       </motion.div>

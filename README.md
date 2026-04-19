@@ -52,7 +52,9 @@ knowledge-base/
 │   │   ├── simulator-panel.tsx   # Панель симулятора
 │   │   └── ...
 │   ├── data/            # Данные приложения
-│   │   └── mock-data.ts # Мок-данные
+│   │   ├── Baza_znanii_structure.json
+│   │   ├── baza-znanii.ts   # Разбор JSON → дисциплины и навыки
+│   │   └── user-profile.ts # Стартовый профиль и бейджи
 │   ├── store/           # Управление состоянием
 │   │   └── knowledge-base.ts # Zustand store
 │   └── types/           # TypeScript типы

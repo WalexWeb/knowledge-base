@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Network } from "lucide-react";
-import { DISCIPLINES } from "@/src/data/mock-data";
+import { DISCIPLINES } from "@/src/data/baza-znanii";
 import { CorrelationMap } from "@/src/components/correlation-map";
 import { PageHeader } from "@/src/components/page-header";
 

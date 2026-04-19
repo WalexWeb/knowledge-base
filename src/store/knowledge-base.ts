@@ -2,7 +2,8 @@
 
 import { create } from "zustand";
 import { UserProfile, Discipline } from "../types";
-import { INITIAL_USER_PROFILE, BADGE_SKILLS_MAP } from "../data/mock-data";
+import { INITIAL_USER_PROFILE, BADGE_SKILLS_MAP } from "../data/user-profile";
+import { getTotalSkillIds } from "../data/baza-znanii";
 
 interface KnowledgeBaseStore {
   // Состояние пользователя
@@ -73,11 +74,11 @@ export const useKnowledgeBaseStore = create<KnowledgeBaseStore>((set, get) => ({
         : [...state.userProfile.completedSkills, skillId];
 
       // Проверяем, какие достижения нужно разблокировать
-      let updatedBadges = [...state.userProfile.badges];
+      const updatedBadges = [...state.userProfile.badges];
       
       Object.entries(BADGE_SKILLS_MAP).forEach(([badgeId, requiredSkills]) => {
         const badge = updatedBadges.find((b) => b.id === badgeId);
-        if (badge && !badge.unlocked) {
+        if (badge && !badge.unlocked && requiredSkills.length > 0) {
           // Проверяем, освоены ли все требуемые навыки
           const allSkillsCompleted = requiredSkills.every((skill) =>
             updatedCompletedSkills.includes(skill)
@@ -135,11 +136,11 @@ export const useKnowledgeBaseStore = create<KnowledgeBaseStore>((set, get) => ({
       }
 
       // Проверяем, какие достижения нужно разблокировать
-      let updatedBadges = [...state.userProfile.badges];
+      const updatedBadges = [...state.userProfile.badges];
       
       Object.entries(BADGE_SKILLS_MAP).forEach(([badgeId, requiredSkills]) => {
         const badge = updatedBadges.find((b) => b.id === badgeId);
-        if (badge && !badge.unlocked) {
+        if (badge && !badge.unlocked && requiredSkills.length > 0) {
           // Проверяем, освоены ли все требуемые навыки
           const allSkillsCompleted = requiredSkills.every((skill) =>
             updatedCompletedSkills.includes(skill)
@@ -187,16 +188,12 @@ export const useKnowledgeBaseStore = create<KnowledgeBaseStore>((set, get) => ({
     return disciplines.filter((d) => selectedDisciplines.includes(d.id));
   },
 
-  getTotalSkills: () => {
-    const { selectedDisciplines } = get();
-    // Версия будет заполнена когда у нас будет доступ к дисциплинам
-    return [];
-  },
+  getTotalSkills: () => getTotalSkillIds(),
 
   getCompletionPercentage: () => {
     const { userProfile } = get();
-    // Примерный расчет - всего ~50 навыков в курсе
-    const totalSkills = 50;
-    return Math.round((userProfile.completedSkills.length / totalSkills) * 100);
+    const total = getTotalSkillIds().length;
+    if (total === 0) return 0;
+    return Math.round((userProfile.completedSkills.length / total) * 100);
   },
 }));

@@ -18,7 +18,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Badge } from "../types";
-import { BADGE_DISCIPLINES_MAP } from "../data/mock-data";
+import { BADGE_DISCIPLINES_MAP } from "../data/user-profile";
 
 interface BadgeDisplayProps {
   badges: Badge[];
@@ -74,9 +74,10 @@ export const BadgeDisplay: React.FC<BadgeDisplayProps> = ({
   const isBadgeForSelectedDisciplines = (badgeId: string): boolean => {
     if (selectedDisciplines.length === 0) return true; // Если дисциплины не выбраны, показываем все
 
-    const badgeDisciplines = BADGE_DISCIPLINES_MAP[badgeId] || [];
+    const badgeDisciplines = BADGE_DISCIPLINES_MAP[badgeId];
+    if (!badgeDisciplines || badgeDisciplines.length === 0) return true;
     return badgeDisciplines.some((disciplineId) =>
-      selectedDisciplines.includes(disciplineId)
+      selectedDisciplines.includes(disciplineId),
     );
   };
 
@@ -91,6 +92,7 @@ export const BadgeDisplay: React.FC<BadgeDisplayProps> = ({
       )
       .map((b) => b.id);
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setNewBadges(new Set(recentlyUnlocked));
 
     const timer = setTimeout(() => {

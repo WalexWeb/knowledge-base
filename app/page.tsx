@@ -15,7 +15,7 @@ import {
   Network,
 } from "lucide-react";
 import { useKnowledgeBaseStore } from "@/src/store/knowledge-base";
-import { DISCIPLINES } from "@/src/data/mock-data";
+import { DISCIPLINES } from "@/src/data/baza-znanii";
 import {
   Tabs,
   TabsContent,

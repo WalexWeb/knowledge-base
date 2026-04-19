@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Trophy, TrendingUp, BarChart3, Target, LineChart } from "lucide-react";
 import { useKnowledgeBaseStore } from "@/src/store/knowledge-base";
-import { DISCIPLINES } from "@/src/data/mock-data";
+import { DISCIPLINES } from "@/src/data/baza-znanii";
 import {
   ProgressBar,
   SkillChecklist,
@@ -14,8 +14,12 @@ import { BadgeDisplay } from "@/src/components/badge-display";
 import { PageHeader } from "@/src/components/page-header";
 
 export default function TrackerPage() {
-  const { userProfile, toggleSkillCompletion, toggleDisciplineCompletion, unlockBadge } =
-    useKnowledgeBaseStore();
+  const {
+    userProfile,
+    toggleSkillCompletion,
+    toggleDisciplineCompletion,
+    unlockBadge,
+  } = useKnowledgeBaseStore();
   const [showBadges, setShowBadges] = useState(false);
 
   // Собираем все навыки со всех дисциплин
@@ -216,7 +220,7 @@ export default function TrackerPage() {
                         whileTap={{ scale: 0.95 }}
                         onClick={() =>
                           toggleDisciplineCompletion(
-                            item.skills.map((s) => s.id)
+                            item.skills.map((s) => s.id),
                           )
                         }
                         className={`px-4 py-2 rounded-lg font-medium text-sm transition-all border-2 ${
@@ -253,46 +257,6 @@ export default function TrackerPage() {
               );
             })}
           </div>
-
-          {/* Таймлайн */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="mt-16 bg-linear-to-br from-white to-slate-50 dark:from-slate-800/50 dark:to-slate-900/50 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-8 shadow-sm"
-          >
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8">
-              <div className="flex items-center gap-2">
-                <LineChart size={20} />
-                Путь развития
-              </div>
-            </h2>
-            <div className="space-y-6">
-              {[1, 2, 3, 4].map((semester) => {
-                const semesterDisciplines = DISCIPLINES.filter(
-                  (d) => d.semester === semester,
-                );
-                const semesterSkills = semesterDisciplines.flatMap(
-                  (d) => d.skills,
-                );
-                const completedInSemester = semesterSkills.filter((s) =>
-                  userProfile.completedSkills.includes(s.id),
-                );
-
-                return (
-                  <TimelineItem
-                    key={semester}
-                    semester={semester}
-                    skillsCount={semesterSkills.length}
-                    isCompleted={
-                      completedInSemester.length === semesterSkills.length
-                    }
-                    position={semester - 1}
-                  />
-                );
-              })}
-            </div>
-          </motion.div>
         </main>
       </div>
     </div>

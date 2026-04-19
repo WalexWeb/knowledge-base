@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Zap, BookOpen } from "lucide-react";
 import { useKnowledgeBaseStore } from "@/src/store/knowledge-base";
-import { DISCIPLINES } from "@/src/data/mock-data";
+import { DISCIPLINES } from "@/src/data/baza-znanii";
 import { SimulatorPanel } from "@/src/components/simulator-panel";
 import { PageHeader } from "@/src/components/page-header";
 
