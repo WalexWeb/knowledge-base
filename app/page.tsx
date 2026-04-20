@@ -29,6 +29,7 @@ import {
   getSpecializations,
   getSpecializationData,
 } from "@/src/utils/specialization-formatter";
+import { PageHeader } from "@/src/components/page-header";
 
 export default function Home() {
   const {
@@ -85,145 +86,65 @@ export default function Home() {
     setActiveTab("map");
   };
 
+  const tabButtons = (
+    <div className="flex items-center gap-2">
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setActiveTab("map")}
+        className={`flex items-center gap-2  px-3 py-2 rounded-lg text-sm font-medium transition-all border ${
+          activeTab === "map"
+            ? "bg-linear-to-r from-indigo-500 to-purple-500 text-white border-indigo-500/60"
+            : "bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border-indigo-500/30 hover:border-indigo-500/60"
+        }`}
+      >
+        <Map size={16} />
+        <span className="hidden sm:inline">Карта дисциплин</span>
+        <span className="sm:hidden">Карта</span>
+      </motion.button>
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setActiveTab("comparison")}
+        disabled={selectedDisciplines.length === 0}
+        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${
+          activeTab === "comparison"
+            ? "bg-linear-to-r from-indigo-500 to-purple-500 text-white border-indigo-500/60"
+            : "bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border-indigo-500/30 hover:border-indigo-500/60"
+        } disabled:opacity-40 disabled:hover:scale-100`}
+      >
+        <BarChart3 size={16} />
+        <span className="hidden sm:inline">
+          Сравнение ({selectedDisciplines.length})
+        </span>
+        <span className="sm:hidden">Сравн. ({selectedDisciplines.length})</span>
+      </motion.button>
+    </div>
+  );
+
   return (
-    <div className="min-h-screen bg-linear-to-br from-white via-slate-50 to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-slate-900 dark:text-white">
-      {/* Фоновые элементы */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-400/10 dark:bg-indigo-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-400/10 dark:bg-purple-500/10 rounded-full blur-3xl"></div>
-      </div>
+    <div className="min-h-screen bg-linear-to-br ...">
+      <div className="fixed inset-0 pointer-events-none">...</div>
 
-      {/* НАВИГАЦИЯ */}
-      <nav className="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Левая часть: кнопка назад + логотип + название специализации */}
-            <div className="flex items-center gap-4 shrink-0">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="flex items-center gap-2"
-              >
-                <div className="p-1.5 rounded-lg bg-indigo-100/50 dark:bg-indigo-900/30">
-                  <Shield
-                    size={22}
-                    className="text-indigo-600 dark:text-indigo-400"
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-lg font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                    База знаний
-                  </span>
-                </div>
-              </motion.div>
-              {selectedSpecializationId && (
-                <motion.button
-                  onClick={handleBackToSpecializations}
-                  whileHover={{
-                    scale: 1.05,
-                    backgroundColor: "rgba(0,0,0,0.05)",
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all bg-white/40 dark:bg-slate-800/40 hover:bg-white/60 dark:hover:bg-slate-700/60 text-slate-700 dark:text-slate-200 border border-slate-200/50 dark:border-slate-700/50"
-                >
-                  <ArrowLeft size={16} />
-                  <span className="hidden sm:inline">Все специализации</span>
-                  <span className="sm:hidden">Назад</span>
-                </motion.button>
-              )}
-            </div>
-
-            {/* Центральная часть: вкладки (только при выбранной специализации) */}
-            {selectedSpecializationId && (
-              <div className="flex-1 flex justify-center mx-4">
-                <Tabs
-                  value={activeTab}
-                  onValueChange={setActiveTab}
-                  className="w-auto"
-                >
-                  <TabsList className="bg-white/40 dark:bg-slate-800/40 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 rounded-full p-1 gap-1 shadow-sm">
-                    <TabsTrigger
-                      value="map"
-                      className="flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-all data-[state=active]:bg-linear-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-500 data-[state=active]:text-white data-[state=active]:shadow-md hover:scale-105"
-                    >
-                      <Map size={16} />
-                      <span className="hidden sm:inline">Карта дисциплин</span>
-                      <span className="sm:hidden">Карта</span>
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="comparison"
-                      disabled={selectedDisciplines.length === 0}
-                      className="flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-all data-[state=active]:bg-linear-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-500 data-[state=active]:text-white data-[state=active]:shadow-md hover:scale-105 disabled:opacity-40 disabled:hover:scale-100"
-                    >
-                      <BarChart3 size={16} />
-                      <span className="hidden sm:inline">
-                        Сравнение ({selectedDisciplines.length})
-                      </span>
-                      <span className="sm:hidden">
-                        Сравн. ({selectedDisciplines.length})
-                      </span>
-                    </TabsTrigger>
-                  </TabsList>
-                </Tabs>
-              </div>
-            )}
-
-            {/* Правая часть: ссылки на другие страницы */}
-            <div className="flex items-center gap-2 shrink-0">
-              <motion.div
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 }}
-              >
-                <Link href="/simulator">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 hover:border-cyan-500/60"
-                  >
-                    <Zap size={16} />
-                    <span>Симулятор</span>
-                  </motion.button>
-                </Link>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.15 }}
-              >
-                <Link href="/tracker">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 hover:border-emerald-500/60"
-                  >
-                    <Trophy size={16} />
-                    <span>Трекер</span>
-                  </motion.button>
-                </Link>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <Link href="/correlations">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 hover:border-indigo-500/60"
-                  >
-                    <Network size={16} />
-                    <span>Корреляции</span>
-                  </motion.button>
-                </Link>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <PageHeader
+        currentPage="map"
+        hideMapButton={!!selectedSpecializationId}
+        leftSlot={
+          selectedSpecializationId && (
+            <motion.button
+              onClick={handleBackToSpecializations}
+              whileHover={{ scale: 1.05, backgroundColor: "rgba(0,0,0,0.05)" }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all bg-white/40 dark:bg-slate-800/40 hover:bg-white/60 dark:hover:bg-slate-700/60 text-slate-700 dark:text-slate-200 border border-slate-200/50 dark:border-slate-700/50"
+            >
+              <ArrowLeft size={16} />
+              <span className="hidden sm:inline">Все специализации</span>
+              <span className="sm:hidden">Назад</span>
+            </motion.button>
+          )
+        }
+        centerSlot={selectedSpecializationId ? tabButtons : undefined}
+      />
 
       {/* Основной контент */}
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
