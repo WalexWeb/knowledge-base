@@ -4,13 +4,16 @@ export type CompetencyType = "УК" | "ПК" | "ОПК";
 // Уровни овладения навыком
 export type SkillLevel = "знать" | "уметь" | "владеть";
 
-// Интерфейс навыка
+// Интерфейс навыка (компетенции, разбитой на три уровня)
 export interface Skill {
   id: string;
-  name: string;
+  name: string; // описание компетенции
   type: CompetencyType;
   level: SkillLevel;
-  icon?: string;
+  description?: string;
+  knowledge?: string;
+  skills?: string;
+  ownership?: string;
 }
 
 // Интерфейс дисциплины
@@ -20,36 +23,34 @@ export interface Discipline {
   semester: number;
   description?: string;
   skills: Skill[];
-  prerequisites?: string[]; // ID других дисциплин
-  hours?: number;
+  prerequisites?: string[]; // ID других дисциплин (пока не используется)
+  hours?: number; // пока нет в JSON, оставляем опциональным
 }
 
-// Интерфейс компетенции
+// Остальные интерфейсы (Competency, DisciplineCompetency, UserProfile, Badge, DisciplineNode, Recommendation)
+// оставляем без изменений, так как они не используются в новой логике
 export interface Competency {
   id: string;
-  code: string; // ПК-1, УК-2 и т.д.
+  code: string;
   name: string;
   type: CompetencyType;
   description?: string;
 }
 
-// Интерфейс для связи дисциплины и компетенции
 export interface DisciplineCompetency {
   disciplineId: string;
   competencyId: string;
-  coverage: number; // 0-100 процент покрытия
+  coverage: number;
 }
 
-// Интерфейс пользовательского профиля
 export interface UserProfile {
   id: string;
-  completedSkills: string[]; // ID навыков
-  selectedDisciplines: string[]; // ID дисциплин
+  completedSkills: string[];
+  selectedDisciplines: string[];
   badges: Badge[];
-  completionDate?: Record<string, string>; // skillId -> ISO date
+  completionDate?: Record<string, string>;
 }
 
-// Интерфейс бейджа
 export interface Badge {
   id: string;
   name: string;
@@ -59,7 +60,6 @@ export interface Badge {
   unlockedAt?: string;
 }
 
-// Интерфейс для элемента графа (дисциплина в React Flow)
 export interface DisciplineNode {
   id: string;
   data: {
@@ -71,7 +71,6 @@ export interface DisciplineNode {
   position: { x: number; y: number };
 }
 
-// Интерфейс рекомендации
 export interface Recommendation {
   disciplineId: string;
   reason: string;

@@ -254,36 +254,6 @@ export const CorrelationMap: React.FC<CorrelationMapProps> = ({
         ))}
       </motion.div>
 
-      {/* Информация */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="mt-12 p-6 bg-slate-100 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700/50"
-      >
-        <h3 className="font-bold mb-3">Как читать матрицу:</h3>
-        <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
-          <li>
-            <strong>Пустая ячейка:</strong> Дисциплины не имеют общих
-            компетенций
-          </li>
-          <li>
-            <strong>Цветная ячейка с числом:</strong> Количество общих
-            компетенций между дисциплинами
-          </li>
-          <li>
-            <strong>Синий цвет:</strong> 1 общая компетенция
-          </li>
-          <li>
-            <strong>Зелёный цвет:</strong> 2 общие компетенции
-          </li>
-          <li>
-            <strong>Фиолетовый цвет:</strong> 3 общие компетенции (все типы: УК,
-            ПК, ОПК)
-          </li>
-        </ul>
-      </motion.div>
-
       {/* Режимы просмотра */}
       <AnimatePresence mode="wait">
         {/* Представление тепловой карты */}

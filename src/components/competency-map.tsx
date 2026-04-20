@@ -2,9 +2,9 @@
 
 import { useMemo } from "react";
 import { motion } from "framer-motion";
+import { Map as MapIcon, Lightbulb, X, GraduationCap } from "lucide-react";
 import { Discipline } from "../types";
 import { DisciplineCard } from "./discipline-card";
-import { X } from "lucide-react";
 
 interface CompetencyMapProps {
   disciplines: Discipline[];
@@ -12,22 +12,20 @@ interface CompetencyMapProps {
   onSelectDiscipline: (id: string, isMultiple: boolean) => void;
   onSkillClick?: (skillId: string) => void;
   onClearSelection?: () => void;
+  specializationName?: string;
 }
 
 export const CompetencyMap: React.FC<CompetencyMapProps> = ({
   disciplines,
   selectedDisciplineIds,
   onSelectDiscipline,
-  onSkillClick,
   onClearSelection,
+  specializationName,
 }) => {
-  // Группируем по семестрам
   const disciplinesBySemester = useMemo(() => {
     const grouped = new Map<number, Discipline[]>();
     disciplines.forEach((d) => {
-      if (!grouped.has(d.semester)) {
-        grouped.set(d.semester, []);
-      }
+      if (!grouped.has(d.semester)) grouped.set(d.semester, []);
       grouped.get(d.semester)!.push(d);
     });
     return Array.from(grouped.entries()).sort((a, b) => a[0] - b[0]);
@@ -35,112 +33,95 @@ export const CompetencyMap: React.FC<CompetencyMapProps> = ({
 
   return (
     <div className="w-full">
-      {/* Заголовок */}
-      <div className="flex items-center justify-between mb-8">
+      {/* Заголовок с иконкой карты */}
+      <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
+          className="flex items-center gap-3"
         >
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+          <MapIcon size={36} className="text-indigo-500 mb-6" />
+          <h1 className="text-4xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
             Карта дисциплин
           </h1>
-          <p className="text-slate-600 dark:text-slate-400 mt-2">
-            База знаний Информационной безопасности
-          </p>
         </motion.div>
         {selectedDisciplineIds.length > 0 && (
           <motion.button
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
             onClick={onClearSelection}
-            className="flex items-center gap-2 px-4 py-2 bg-linear-to-br from-red-100 to-red-50 dark:from-red-900/30 dark:to-red-800/20 hover:from-red-200 hover:to-red-100 dark:hover:from-red-900/50 dark:hover:to-red-800/30 text-red-700 dark:text-red-200 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-red-50/80 dark:bg-red-900/30 backdrop-blur-sm border border-red-200 dark:border-red-700/50 text-red-700 dark:text-red-200 font-medium transition-all hover:bg-red-100 dark:hover:bg-red-900/50"
           >
-            <X size={18} />
-            Очистить ({selectedDisciplineIds.length})
+            <X size={18} /> Очистить ({selectedDisciplineIds.length})
           </motion.button>
         )}
       </div>
 
-      {/* Легенда */}
+      {/* Совет */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="mb-6 p-5 bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700/50 backdrop-blur-xl shadow-sm flex flex-wrap gap-8"
+        className="mb-6 p-4 rounded-xl bg-blue-50/50 dark:bg-blue-900/20 backdrop-blur-sm border border-blue-200 dark:border-blue-700/30 text-slate-700 dark:text-slate-200 text-sm flex items-center gap-3"
       >
-        <div className="flex items-center gap-3">
-          <div className="w-5 h-5 rounded-lg bg-linear-to-br from-blue-400 to-blue-600 shadow-md"></div>
-          <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
-            УК - Универсальные компетенции
-          </span>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="w-5 h-5 rounded-lg bg-linear-to-br from-emerald-400 to-emerald-600 shadow-md"></div>
-          <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
-            ПК - Профессиональные компетенции
-          </span>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="w-5 h-5 rounded-lg bg-linear-to-br from-purple-400 to-purple-600 shadow-md"></div>
-          <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
-            ОПК — общепрофессиональные компетенции
-          </span>
-        </div>
-      </motion.div>
-      {/* Совет */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="mb-8 p-5 bg-linear-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border border-blue-200 dark:border-blue-700/50 rounded-2xl text-slate-700 dark:text-slate-300 text-sm font-medium backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow"
-      >
-        <div className="flex gap-3">
-          <div className="text-md font-medium">
-            <strong>Совет:</strong> Используйте Ctrl (Cmd на Mac) + клик для
-            мультивыбора дисциплин и сравнения входных навыков.
-          </div>
-        </div>
+        <Lightbulb size={18} className="text-blue-600 dark:text-blue-400" />
+        <span>
+          <strong>Совет:</strong> Используйте{" "}
+          <kbd className="px-1.5 py-0.5 rounded bg-white/50 dark:bg-slate-800 font-mono text-xs">
+            Ctrl
+          </kbd>{" "}
+          (или{" "}
+          <kbd className="px-1.5 py-0.5 rounded bg-white/50 dark:bg-slate-800 font-mono text-xs">
+            Cmd
+          </kbd>
+          ) + клик для выбора нескольких дисциплин.
+        </span>
       </motion.div>
 
-      {/* Сетка по семестрам */}
+      {/* Название специализации – новый блок с дизайном */}
+      {specializationName && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="mb-8 text-center"
+        >
+          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-linear-to-r from-indigo-50/80 to-purple-50/80 dark:from-indigo-900/30 dark:to-purple-900/30 backdrop-blur-sm border border-indigo-200 dark:border-indigo-700/50 shadow-sm">
+            <GraduationCap
+              size={20}
+              className="text-indigo-500 dark:text-indigo-400"
+            />
+            <span className="text-xl font-semibold bg-linear-to-r dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+              {specializationName}
+            </span>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Семестры */}
       <div className="space-y-12">
-        {disciplinesBySemester.map(([semester, sems]) => (
+        {disciplinesBySemester.map(([semester, sems], idx) => (
           <motion.div
             key={semester}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: semester * 0.05 }}
+            transition={{ delay: idx * 0.05 }}
           >
-            {/* Заголовок семестра */}
             <div className="mb-5 flex items-center gap-4">
-              <div className="flex-1 h-0.5 bg-linear-to-br from-slate-200 dark:from-slate-700/50 to-transparent rounded-full"></div>
-              <motion.h2
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-2xl font-bold text-slate-800 dark:text-white min-w-max bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text"
-              >
+              <div className="flex-1 h-px bg-linear-to-r from-transparent via-slate-300 dark:via-slate-700 to-transparent" />
+              <h2 className="text-2xl font-bold text-slate-800 dark:text-white">
                 Семестр {semester}
-              </motion.h2>
-              <div className="flex-1 h-0.5 bg-linear-to-l from-slate-200 dark:from-slate-700/50 to-transparent rounded-full"></div>
+              </h2>
+              <div className="flex-1 h-px bg-linear-to-l from-transparent via-slate-300 dark:via-slate-700 to-transparent" />
             </div>
-
-            {/* Карточки дисциплин */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {sems.map((discipline, index) => (
-                <motion.div
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {sems.map((discipline) => (
+                <DisciplineCard
                   key={discipline.id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <DisciplineCard
-                    discipline={discipline}
-                    semester={semester}
-                    isSelected={selectedDisciplineIds.includes(discipline.id)}
-                    onSelect={onSelectDiscipline}
-                    onSkillClick={onSkillClick}
-                  />
-                </motion.div>
+                  discipline={discipline}
+                  semester={semester}
+                  isSelected={selectedDisciplineIds.includes(discipline.id)}
+                  onSelect={onSelectDiscipline}
+                />
               ))}
             </div>
           </motion.div>
