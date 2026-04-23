@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Map, Zap, Trophy, Network, Shield } from "lucide-react";
-import Image from "next/image";
 
 interface PageHeaderProps {
   currentPage?: "map" | "simulator" | "tracker" | "correlations";
@@ -42,13 +41,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
       animate={{ opacity: 1, x: 0 }}
       className="flex items-center gap-3"
     >
-      <Image
-        src="/logo.png"
-        alt="Logo"
-        width={56}
-        height={56}
-        className="shrink-0"
-      />
+      <img src="/logo.png" alt="Logo" width={56} height={56} />
       <span className="text-2xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
         База знаний
       </span>
