@@ -6,7 +6,6 @@ import Link from "next/link";
 import {
   Map,
   BarChart3,
-  Shield,
   BookOpen,
   BookMarked,
   Calendar,
@@ -20,8 +19,6 @@ import { useKnowledgeBaseStore } from "@/src/store/knowledge-base";
 import {
   Tabs,
   TabsContent,
-  TabsList,
-  TabsTrigger,
 } from "@/src/components/ui/tabs";
 import { CompetencyMap } from "@/src/components/competency-map";
 import { ComparisonPanel } from "@/src/components/comparison-panel";
@@ -437,7 +434,7 @@ export default function Home() {
               <ul className="space-y-2 text-sm">
                 <li>
                   <Link
-                    href="/"
+                    href="/education-tree"
                     className="text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                   >
                     Карта дисциплин
