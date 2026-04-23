@@ -1,0 +1,7 @@
+services:
+  knowledge-base:
+    container_name: knowledge-base
+    build: .
+    ports:
+      - "3000:80"
+    restart: unless-stopped
