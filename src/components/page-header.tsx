@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Map, Zap, Trophy, Network, Shield } from "lucide-react";
+import { Map, Zap, Trophy, Network, TreePine } from "lucide-react";
 
 interface PageHeaderProps {
-  currentPage?: "map" | "simulator" | "tracker" | "correlations";
+  currentPage?: "map" | "simulator" | "tracker" | "correlations" | "education-tree";
   leftSlot?: React.ReactNode;
   centerSlot?: React.ReactNode;
   rightSlot?: React.ReactNode;
@@ -29,6 +29,12 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
       label: "Корреляции",
       color: "indigo",
     },
+    {
+      href: "/education-tree",
+      icon: TreePine,
+      label: "Древо обучения",
+      color: "amber",
+    },
   ];
 
   const filteredNavItems = hideMapButton
@@ -36,16 +42,18 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
     : navItems;
 
   const defaultLeftSlot = (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="flex items-center gap-3"
-    >
-      <img src="/logo.png" alt="Logo" width={56} height={56} />
-      <span className="text-2xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-        База знаний
-      </span>
-    </motion.div>
+    <Link href="/">
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="flex items-center gap-3 cursor-pointer"
+      >
+        <img src="/logo.png" alt="Logo" width={56} height={56} />
+        <span className="text-2xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          База знаний
+        </span>
+      </motion.div>
+    </Link>
   );
 
   const defaultRightSlot = (
@@ -55,7 +63,8 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           (currentPage === "map" && href === "/") ||
           (currentPage === "simulator" && href === "/simulator") ||
           (currentPage === "tracker" && href === "/tracker") ||
-          (currentPage === "correlations" && href === "/correlations");
+          (currentPage === "correlations" && href === "/correlations") ||
+          (currentPage === "education-tree" && href === "/education-tree");
 
         const bgColorClass = {
           cyan: isActive
@@ -67,12 +76,16 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           indigo: isActive
             ? "bg-indigo-500/20"
             : "bg-indigo-500/10 hover:bg-indigo-500/20",
+          amber: isActive
+            ? "bg-amber-500/20"
+            : "bg-amber-500/10 hover:bg-amber-500/20",
         }[color];
 
         const textColorClass = {
           cyan: "text-cyan-600 dark:text-cyan-400",
           emerald: "text-emerald-600 dark:text-emerald-400",
           indigo: "text-indigo-600 dark:text-indigo-400",
+          amber: "text-amber-600 dark:text-amber-400",
         }[color];
 
         const borderColorClass = {
@@ -85,6 +98,9 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           indigo: isActive
             ? "border-indigo-500/60"
             : "border-indigo-500/30 hover:border-indigo-500/60",
+          amber: isActive
+            ? "border-amber-500/60"
+            : "border-amber-500/30 hover:border-amber-500/60",
         }[color];
 
         return (

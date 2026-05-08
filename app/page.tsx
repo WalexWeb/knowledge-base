@@ -14,6 +14,7 @@ import {
   Network,
   GraduationCap,
   ArrowLeft,
+  TreePine,
 } from "lucide-react";
 import { useKnowledgeBaseStore } from "@/src/store/knowledge-base";
 import { Tabs, TabsContent } from "@/src/components/ui/tabs";
@@ -365,12 +366,12 @@ export default function Home() {
         )}
       </main>
 
-      {/* Быстрые ссылки и footer */}
+      {/* Быстрые ссылки */}
       <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 "
         >
           <Link href="/simulator">
             <motion.div
@@ -455,6 +456,34 @@ export default function Home() {
               </div>
             </motion.div>
           </Link>
+          <Link href="/education-tree">
+            <motion.div
+              whileHover={{ scale: 1.02, y: -5 }}
+              whileTap={{ scale: 0.98 }}
+              className="p-8 bg-linear-to-br from-amber-50 to-amber-50 dark:from-amber-900/20 dark:to-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-2xl cursor-pointer shadow-lg hover:shadow-xl transition-all"
+            >
+              <div className="flex items-center gap-4 mb-4">
+                <div className="p-3 bg-amber-500/20 dark:bg-amber-500/30 rounded-xl">
+                  <TreePine
+                    size={28}
+                    className="text-amber-600 dark:text-amber-400"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-amber-900 dark:text-white">
+                    Древо обучения
+                  </h3>
+                </div>
+              </div>
+              <p className="text-slate-600 dark:text-slate-300 text-sm mb-4">
+                Изучайте взаимосвязи между дисциплинами по компетенциям и
+                находите дополняющие друг друга курсы
+              </p>
+              <div className="inline-block px-4 py-2 bg-amber-600 text-white rounded-lg font-medium text-sm hover:bg-amber-700 transition-colors">
+                Перейти →
+              </div>
+            </motion.div>
+          </Link>
         </motion.div>
       </section>
 
@@ -499,7 +528,7 @@ export default function Home() {
                     href="/education-tree"
                     className="text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                   >
-                    Карта дисциплин
+                    Древо обучения
                   </Link>
                 </li>
                 <li>
