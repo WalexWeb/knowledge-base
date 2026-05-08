@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Trophy, TrendingUp, BarChart3, Target, LineChart } from "lucide-react";
 import { useKnowledgeBaseStore } from "@/src/store/knowledge-base";
-import { DISCIPLINES } from "@/src/data/baza-znanii";
 import {
   ProgressBar,
   SkillChecklist,
@@ -12,8 +11,10 @@ import {
 } from "@/src/components/progress-components";
 import { BadgeDisplay } from "@/src/components/badge-display";
 import { PageHeader } from "@/src/components/page-header";
+import { useKnowledgeTree } from "@/src/lib/knowledge-api";
 
 export default function TrackerPage() {
+  const { disciplines } = useKnowledgeTree();
   const {
     userProfile,
     toggleSkillCompletion,
@@ -25,7 +26,7 @@ export default function TrackerPage() {
   // Собираем все навыки со всех дисциплин
   const allSkills = useMemo(() => {
     const skillMap = new Map();
-    DISCIPLINES.forEach((d) => {
+    disciplines.forEach((d) => {
       d.skills.forEach((s) => {
         if (!skillMap.has(s.id)) {
           skillMap.set(s.id, s);
@@ -33,18 +34,18 @@ export default function TrackerPage() {
       });
     });
     return Array.from(skillMap.values());
-  }, []);
+  }, [disciplines]);
 
   // Группируем навыки по дисциплинам и семестрам
   const skillsByDiscipline = useMemo(() => {
-    return DISCIPLINES.map((d) => ({
+    return disciplines.map((d) => ({
       discipline: d,
       skills: d.skills.map((s) => ({
         ...s,
         completed: userProfile.completedSkills.includes(s.id),
       })),
     }));
-  }, [userProfile.completedSkills]);
+  }, [disciplines, userProfile.completedSkills]);
 
   const completionPercentage = useMemo(() => {
     return Math.round(

@@ -16,19 +16,34 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { useKnowledgeBaseStore } from "@/src/store/knowledge-base";
-import {
-  Tabs,
-  TabsContent,
-} from "@/src/components/ui/tabs";
+import { Tabs, TabsContent } from "@/src/components/ui/tabs";
 import { CompetencyMap } from "@/src/components/competency-map";
 import { ComparisonPanel } from "@/src/components/comparison-panel";
-import {
-  getSpecializations,
-  getSpecializationData,
-} from "@/src/utils/specialization-formatter";
 import { PageHeader } from "@/src/components/page-header";
+import { useKnowledgeTree } from "@/src/lib/knowledge-api";
+import type { CompetencyType, Discipline } from "@/src/types";
+
+const PLACEHOLDER_VALUES = new Set(["", "-", "_", "—"]);
+
+function mapCompetencyType(code: number): CompetencyType {
+  switch (code) {
+    case 0:
+      return "ОПК";
+    case 1:
+      return "УК";
+    case 2:
+      return "ПК";
+    default:
+      return "ОПК";
+  }
+}
+
+function isMeaningfulText(text: string | undefined): boolean {
+  return !PLACEHOLDER_VALUES.has((text ?? "").trim());
+}
 
 export default function Home() {
+  const { directions } = useKnowledgeTree();
   const {
     selectedDisciplines,
     selectDiscipline,
@@ -43,7 +58,14 @@ export default function Home() {
   >(null);
 
   // Список всех специализаций
-  const specializations = useMemo(() => getSpecializations(), []);
+  const specializations = useMemo(() => {
+    return directions.flatMap((direction) =>
+      (direction.specializations ?? []).map((spec) => ({
+        id: spec.id,
+        name: spec.name,
+      })),
+    );
+  }, [directions]);
 
   // Текущая выбранная специализация (объект)
   const currentSpecialization = useMemo(() => {
@@ -52,10 +74,50 @@ export default function Home() {
   }, [specializations, selectedSpecializationId]);
 
   // Дисциплины выбранной специализации
-  const disciplines = useMemo(() => {
+  const disciplines = useMemo<Discipline[]>(() => {
     if (!selectedSpecializationId) return [];
-    return getSpecializationData(selectedSpecializationId);
-  }, [selectedSpecializationId]);
+    for (const direction of directions) {
+      for (const spec of direction.specializations ?? []) {
+        if (spec.id !== selectedSpecializationId) continue;
+        return (spec.semesters ?? []).flatMap((semester) =>
+          (semester.disciplines ?? []).map((disc) => {
+            const meaningfulCompetencies = (disc.competencies ?? []).filter(
+              (comp) => isMeaningfulText(comp.description),
+            );
+            const competencySource =
+              meaningfulCompetencies.length > 0
+                ? meaningfulCompetencies
+                : (disc.competencies ?? []);
+            const firstMeaningfulDescription = competencySource.find((comp) =>
+              isMeaningfulText(comp.description),
+            )?.description;
+
+            return {
+              id: disc.id,
+              name: disc.name,
+              semester: semester.number,
+              skills: competencySource.map((comp) => ({
+                id: comp.id,
+                name: comp.description,
+                type: mapCompetencyType(comp.competenceType),
+                level: "знать" as const,
+              })),
+              type:
+                competencySource[0]?.competenceType === 0
+                  ? "ОПК"
+                  : competencySource[0]?.competenceType === 1
+                    ? "УК"
+                    : "ПК",
+              description:
+                (isMeaningfulText(disc.description) ? disc.description : "") ||
+                (firstMeaningfulDescription ?? "").slice(0, 120),
+            };
+          }),
+        );
+      }
+    }
+    return [];
+  }, [directions, selectedSpecializationId]);
 
   // Фильтрация по выбранному навыку
   const filteredDisciplines = useMemo(() => {
@@ -488,7 +550,9 @@ export default function Home() {
           </div>
           <div className="border-t border-slate-200 dark:border-slate-800 pt-6 text-center">
             <p className="text-sm text-slate-600 dark:text-slate-400">
-              © 2026 База знаний. Все права защищены.
+              Проект разработан курсантами факультета подготовки специалистов в
+              области информационной безопасности Московского университета МВД
+              России имени В.Я. Кикотя
             </p>
           </div>
         </div>

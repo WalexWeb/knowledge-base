@@ -3,12 +3,13 @@
 import { motion } from "framer-motion";
 import { Zap, BookOpen } from "lucide-react";
 import { useKnowledgeBaseStore } from "@/src/store/knowledge-base";
-import { DISCIPLINES } from "@/src/data/baza-znanii";
 import { SimulatorPanel } from "@/src/components/simulator-panel";
 import { PageHeader } from "@/src/components/page-header";
+import { useKnowledgeTree } from "@/src/lib/knowledge-api";
 
 export default function SimulatorPage() {
   const { selectedDisciplines, selectDiscipline } = useKnowledgeBaseStore();
+  const { disciplines } = useKnowledgeTree();
 
   const handleSelectDiscipline = (id: string) => {
     selectDiscipline(id, true);
@@ -55,7 +56,7 @@ export default function SimulatorPage() {
                   <BookOpen size={20} /> Все дисциплины
                 </h3>
                 <div className="space-y-2 max-h-[calc(100vh-300px)] overflow-y-auto">
-                  {DISCIPLINES.map((discipline) => (
+                  {disciplines.map((discipline) => (
                     <motion.button
                       key={discipline.id}
                       layout
@@ -96,7 +97,7 @@ export default function SimulatorPage() {
               className="lg:col-span-3"
             >
               <SimulatorPanel
-                allDisciplines={DISCIPLINES}
+                allDisciplines={disciplines}
                 selectedDisciplines={selectedDisciplines}
                 onSelectDiscipline={handleSelectDiscipline}
               />

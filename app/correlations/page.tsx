@@ -2,11 +2,12 @@
 
 import { motion } from "framer-motion";
 import { Network } from "lucide-react";
-import { DISCIPLINES } from "@/src/data/baza-znanii";
 import { CorrelationMap } from "@/src/components/correlation-map";
 import { PageHeader } from "@/src/components/page-header";
+import { useKnowledgeTree } from "@/src/lib/knowledge-api";
 
 export default function CorrelationsPage() {
+  const { disciplines } = useKnowledgeTree();
   return (
     <div className="min-h-screen bg-linear-to-br from-white via-slate-50 to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-slate-900 dark:text-white">
       {/* Фоновые элементы */}
@@ -72,7 +73,7 @@ export default function CorrelationsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <CorrelationMap disciplines={DISCIPLINES} />
+            <CorrelationMap disciplines={disciplines} />
           </motion.div>
         </main>
       </div>

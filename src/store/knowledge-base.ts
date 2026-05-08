@@ -3,7 +3,6 @@
 import { create } from "zustand";
 import { UserProfile, Discipline } from "../types";
 import { INITIAL_USER_PROFILE, BADGE_SKILLS_MAP } from "../data/user-profile";
-import { getTotalSkillIds } from "../data/baza-znanii";
 
 interface KnowledgeBaseStore {
   // Состояние пользователя
@@ -188,11 +187,11 @@ export const useKnowledgeBaseStore = create<KnowledgeBaseStore>((set, get) => ({
     return disciplines.filter((d) => selectedDisciplines.includes(d.id));
   },
 
-  getTotalSkills: () => getTotalSkillIds(),
+  getTotalSkills: () => get().userProfile.completedSkills,
 
   getCompletionPercentage: () => {
     const { userProfile } = get();
-    const total = getTotalSkillIds().length;
+    const total = get().userProfile.completedSkills.length;
     if (total === 0) return 0;
     return Math.round((userProfile.completedSkills.length / total) * 100);
   },
