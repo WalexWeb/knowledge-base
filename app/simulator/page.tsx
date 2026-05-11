@@ -113,7 +113,7 @@ export default function SimulatorPage() {
               className="mt-8 p-6 bg-slate-900/50 border border-slate-700 rounded-xl text-center"
             >
               <p className="text-slate-400">
-                👈 Нажмите на дисциплину слева или используйте быстрый выбор на
+                Нажмите на дисциплину слева или используйте быстрый выбор на
                 главной странице
               </p>
             </motion.div>
