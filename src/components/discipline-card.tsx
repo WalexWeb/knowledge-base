@@ -17,8 +17,8 @@ export const DisciplineCard: React.FC<DisciplineCardProps> = ({
   isSelected,
   onSelect,
 }) => {
-  const handleClick = (e: React.MouseEvent) => {
-    onSelect(discipline.id, e.ctrlKey || e.metaKey);
+  const handleClick = () => {
+    onSelect(discipline.id, true);
   };
 
   return (

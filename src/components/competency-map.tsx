@@ -65,15 +65,7 @@ export const CompetencyMap: React.FC<CompetencyMapProps> = ({
       >
         <Lightbulb size={18} className="text-blue-600 dark:text-blue-400" />
         <span>
-          <strong>Совет:</strong> Используйте{" "}
-          <kbd className="px-1.5 py-0.5 rounded bg-white/50 dark:bg-slate-800 font-mono text-xs">
-            Ctrl
-          </kbd>{" "}
-          (или{" "}
-          <kbd className="px-1.5 py-0.5 rounded bg-white/50 dark:bg-slate-800 font-mono text-xs">
-            Cmd
-          </kbd>
-          ) + клик для выбора нескольких дисциплин.
+          <strong>Совет:</strong> Вы можете выбрать необходимые дисциплины для сравнения.
         </span>
       </motion.div>
 
