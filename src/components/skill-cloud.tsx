@@ -1,142 +1,184 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useMemo } from "react";
 import { Skill } from "../types";
 
 interface SkillCloudProps {
   skills: Skill[];
   onSkillClick?: (skillId: string) => void;
   className?: string;
-  maxHeight?: string; // Опционально, можно переопределить
+  maxHeight?: string;
+  selectedSkillIds?: string[];
 }
-
-const GRADIENT_BY_TYPE = {
-  УК: "from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-700",
-  ПК: "from-emerald-400 to-emerald-600 dark:from-emerald-500 dark:to-emerald-700",
-  ОПК: "from-purple-400 to-purple-600 dark:from-purple-500 dark:to-purple-700",
-};
 
 export const SkillCloud: React.FC<SkillCloudProps> = ({
   skills,
   onSkillClick,
   className = "",
-  maxHeight: customMaxHeight,
+  maxHeight = "500px",
+  selectedSkillIds = [],
 }) => {
-  const [dynamicHeight, setDynamicHeight] = useState("400px");
-
-  useEffect(() => {
-    const calculateHeight = () => {
-      // Если передана кастомная высота, используем её
-      if (customMaxHeight) {
-        setDynamicHeight(customMaxHeight);
-        return;
-      }
-
-      // Расчет высоты в зависимости от размера экрана
-      const viewportHeight = window.innerHeight;
-      const viewportWidth = window.innerWidth;
-
-      let calculatedHeight;
-
-      // Адаптивные значения для разных размеров экрана
-      if (viewportWidth < 640) {
-        // Мобильные устройства
-        calculatedHeight = Math.min(viewportHeight * 0.4, 300);
-      } else if (viewportWidth < 1024) {
-        // Планшеты
-        calculatedHeight = Math.min(viewportHeight * 0.45, 400);
-      } else if (viewportWidth < 1440) {
-        // Ноутбуки
-        calculatedHeight = Math.min(viewportHeight * 0.5, 500);
-      } else {
-        // Большие экраны
-        calculatedHeight = Math.min(viewportHeight * 0.55, 600);
-      }
-
-      // Убеждаемся, что высота не меньше минимального значения
-      calculatedHeight = Math.max(calculatedHeight, 250);
-
-      setDynamicHeight(`${Math.round(calculatedHeight)}px`);
+  // Группировка по типу компетенций
+  const groupedSkills = useMemo(() => {
+    const groups: Record<string, Skill[]> = {
+      УК: [],
+      ПК: [],
+      ОПК: [],
+      Другие: [],
     };
+    skills.forEach((skill) => {
+      if (groups[skill.type]) groups[skill.type].push(skill);
+      else groups["Другие"].push(skill);
+    });
+    return Object.fromEntries(
+      Object.entries(groups).filter(([, arr]) => arr.length > 0),
+    );
+  }, [skills]);
 
-    // Вычисляем при монтировании
-    calculateHeight();
-
-    // Добавляем обработчик изменения размера окна
-    window.addEventListener("resize", calculateHeight);
-
-    // Очищаем обработчик при размонтировании
-    return () => window.removeEventListener("resize", calculateHeight);
-  }, [customMaxHeight]);
+  // Стили бейджей типов
+  const getTypeBadge = (type: string) => {
+    const base =
+      "px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wide";
+    switch (type) {
+      case "УК":
+        return `${base} bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300`;
+      case "ПК":
+        return `${base} bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300`;
+      case "ОПК":
+        return `${base} bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300`;
+    }
+  };
 
   return (
-    <div
-      className={`overflow-y-auto pr-2 ${className}`}
-      style={{ maxHeight: dynamicHeight }}
-    >
-      {/* Кастомный скроллбар для лучшего внешнего вида */}
-      <style jsx>{`
-        div::-webkit-scrollbar {
-          width: 8px;
-        }
-        div::-webkit-scrollbar-track {
-          background: var(--color-surface-secondary);
-          border-radius: 4px;
-        }
-        div::-webkit-scrollbar-thumb {
-          background: var(--color-primary);
-          border-radius: 4px;
-        }
-        div::-webkit-scrollbar-thumb:hover {
-          background: var(--color-primary-600);
-        }
-      `}</style>
+    <div className={`relative ${className}`}>
+      <div
+        className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col"
+        style={{ maxHeight }}
+      >
+        {/* Шапка */}
+        <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex items-center justify-between shrink-0">
+          <div>
+            <h3 className="font-bold text-slate-900 dark:text-white text-base">
+              Компетенции
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              {skills.length} навыков в программе
+            </p>
+          </div>
 
-      <div className="flex flex-wrap gap-2.5">
-        {skills.map((skill, index) => {
-          return (
+          {selectedSkillIds.length > 0 && (
             <motion.button
-              key={skill.id}
-              initial={{ opacity: 0, scale: 0.7, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{
-                delay: index * 0.04,
-                type: "spring",
-                stiffness: 320,
-                damping: 30,
-              }}
-              whileHover={{
-                scale: 1.15,
-                y: -6,
-                boxShadow: "0 20px 30px rgba(0, 0, 0, 0.2)",
-              }}
-              whileTap={{ scale: 0.92 }}
-              onClick={() => onSkillClick?.(skill.id)}
-              className={`
-                relative px-4 py-2 rounded-xl font-semibold text-sm
-                transition-all duration-300 cursor-pointer
-                bg-linear-to-br ${GRADIENT_BY_TYPE[skill.type]}
-                text-white shadow-md hover:shadow-xl
-                border border-white/20 hover:border-white/40
-                group overflow-hidden
-                shrink-0
-              `}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              onClick={() =>
+                selectedSkillIds.forEach((id) => onSkillClick?.(id))
+              }
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 text-xs font-medium hover:bg-indigo-200 dark:hover:bg-indigo-900/60 transition-colors"
             >
-              {/* Фоновая подсветка */}
-              <motion.div
-                className="absolute inset-0 bg-white/15 opacity-0 group-hover:opacity-100"
-                initial={false}
-                transition={{ duration: 0.3 }}
-              />
-
-              {/* Текст */}
-              <span className="relative z-10 flex items-center gap-1">
-                {skill.name}
-              </span>
+              <svg
+                className="w-3.5 h-3.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+              Сбросить ({selectedSkillIds.length})
             </motion.button>
-          );
-        })}
+          )}
+        </div>
+
+        {/* Область прокрутки */}
+        <div className="p-5 overflow-y-auto flex-1">
+          <AnimatePresence mode="popLayout">
+            {Object.entries(groupedSkills).map(([type, typeSkills]) => (
+              <motion.div
+                key={type}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                className="mb-6 last:mb-0"
+              >
+                {/* Заголовок группы */}
+                <div className="flex items-center gap-2 mb-3">
+                  <span className={getTypeBadge(type)}>{type}</span>
+                  <div className="flex-1 h-px bg-slate-200 dark:bg-slate-800" />
+                  <span className="text-xs text-slate-400 font-mono">
+                    {typeSkills.length}
+                  </span>
+                </div>
+
+                {/* Сетка навыков */}
+                <div className="flex flex-wrap gap-2">
+                  {typeSkills.map((skill) => {
+                    const isSelected = selectedSkillIds.includes(skill.id);
+
+                    return (
+                      <motion.button
+                        key={skill.id}
+                        layout
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        whileHover={{ y: -1 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => onSkillClick?.(skill.id)}
+                        className={`
+                          relative px-4 py-2.5 rounded-xl text-sm font-medium
+                          border transition-all duration-200 text-left
+                          min-w-22.5 max-w-full wrap-break-word whitespace-normal
+                          focus:outline-none focus:ring-2 focus:ring-indigo-500/30
+                          ${
+                            isSelected
+                              ? "bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-500/20 pr-8"
+                              : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-sm"
+                          }
+                        `}
+                      >
+                        <span className="block w-full">{skill.name}</span>
+
+                        {/* Индикатор выбора */}
+                        {isSelected && (
+                          <span className="absolute top-2 right-2">
+                            <svg
+                              className="w-3.5 h-3.5 text-white/80"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={3}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          </span>
+                        )}
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+
+          {/* Пустое состояние */}
+          {skills.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-16 text-center text-slate-500 dark:text-slate-400">
+              <p className="font-medium">Нет доступных компетенций</p>
+              <p className="text-sm mt-1 opacity-70">
+                Выберите другую специализацию
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
