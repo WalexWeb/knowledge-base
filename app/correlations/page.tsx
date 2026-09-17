@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Network } from "lucide-react";
+import Link from "next/link";
+import { Network, GitBranch, ArrowRight } from "lucide-react";
 import { CorrelationMap } from "@/src/components/correlation-map";
 import { PageHeader } from "@/src/components/page-header";
 import { useKnowledgeTree } from "@/src/lib/knowledge-api";
@@ -37,6 +38,46 @@ export default function CorrelationsPage() {
               корреляция указывает на дополняющие друг друга знания.
             </p>
           </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="mb-8"
+          >
+            <Link href="/correlations/curriculum-chain">
+              <motion.div
+                whileHover={{ scale: 1.01, y: -2 }}
+                whileTap={{ scale: 0.99 }}
+                className="group p-6 rounded-2xl bg-linear-to-br from-violet-500/10 via-indigo-500/10 to-cyan-500/10 dark:from-violet-500/15 dark:via-indigo-500/15 dark:to-cyan-500/10 border border-violet-500/25 dark:border-violet-500/30 hover:border-violet-500/50 transition-all cursor-pointer shadow-sm hover:shadow-md"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 rounded-xl bg-violet-500/15 text-violet-600 dark:text-violet-400 shrink-0">
+                      <GitBranch size={28} />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-1">
+                        Цепочка дисциплин К1–К4
+                      </h2>
+                      <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xl">
+                        Логические связи между базовыми предметами, фильтры по
+                        категориям и семестрам, проверка порядка изучения
+                      </p>
+                    </div>
+                  </div>
+                  <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-colors shrink-0 self-start sm:self-center">
+                    Открыть
+                    <ArrowRight
+                      size={16}
+                      className="group-hover:translate-x-0.5 transition-transform"
+                    />
+                  </span>
+                </div>
+              </motion.div>
+            </Link>
+          </motion.div>
+
           {/* Информация */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
